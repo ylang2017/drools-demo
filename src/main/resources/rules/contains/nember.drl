@@ -1,0 +1,10 @@
+package rules.contains
+import com.example.drools.entity.Person;
+import com.example.drools.entity.School;
+    rule "test005"
+        when
+            $p:Person();
+            $s:School($p.className memberOf classNames);
+        then
+            System.out.println("测试member of 比较操作符");
+    end

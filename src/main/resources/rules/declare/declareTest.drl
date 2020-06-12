@@ -1,0 +1,26 @@
+package rules.declare
+// import com.example.drools.entity.Person;
+// import function com.example.drools.entity.Person.静态方法;
+// global java.lang.Integer count;
+
+    declare Student
+        name:String
+        age:Integer
+    end
+
+    // 使用extends可以让声明的对象继承一个java对象。拥有目标对象的所有属性，如：
+    // declare Student extends com.example.drools.entity.Person
+
+    rule "test01"
+        when
+        then
+            insert(new Student("小明",15));
+            System.out.println("插入一个学生对象");
+    end
+
+    rule "test02"
+        when
+            $s:Student()
+        then
+            System.out.println("名称："+$s.getName()+",年龄："+$s.getAge());
+    end

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--用于设置规则库名称、包路径、规则会话名称、规则会话类型等-->
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+    <!--一kmodule下可以有多个kbase,多个kbase必须拥有不重复的name属性，packages用于声明规则文件的包，
+         可以一次声明多个包目录，用逗号隔开。
+     -->
+    <kbase name="rules" packages="rules.rulesHello">
+        <!--kbase下可以有多个ksession,多个ksession的name属性也必须不能重复，ksession的name就是
+        用于指定执行规则代码是创建ksession时使用的name-->
+        <ksession name="testhelloworld"></ksession>
+    </kbase>
+
+    <kbase name ="containsTest" packages="rules.contains">
+        <ksession name="testContains"></ksession>
+    </kbase>
+
+    <kbase name ="matchesTest" packages="rules.matches">
+        <ksession name="testMatches"></ksession>
+    </kbase>
+
+    <kbase name ="collections" packages="rules.collection">
+        <ksession name="testCollection"></ksession>
+    </kbase>
+
+    <kbase name ="attribute" packages="rules.attribute">
+        <ksession name="testAttribute"></ksession>
+    </kbase>
+
+    <kbase name ="declare" packages="rules.declare">
+        <ksession name="testDeclare"></ksession>
+    </kbase>
+</kmodule>

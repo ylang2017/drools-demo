@@ -1,0 +1,79 @@
+一个.drl文件被称为一个标准的规则文件。规则文件中包含以下部分：
+package : 包名，其含义和java代码里的package类似。不同的是这里的包名属于逻辑意义上的，也就是说可以在另一个
+            文件里声明同一个包名，在编译时会认为包名相同的规则属于同一个包。java中的包名是逻辑、物理双重意义的。
+import : 用于导入规则文件中会使用到的类或者静态方法。
+global : 用于声明规则文件中的全局变量。一般声明在规则文件头部，package和import之下，如：global java.lang.Integer count;
+
+function : 用于声明规则文件中的自定义函数,具有全局性，相同的包都可以使用。（和js中的function概念相同），LHS中不能直接使用函数，
+            若要使用需要配合eval(function());这样使用。
+queries : 定义查询，
+        query "queryName"
+            $resultName:Object(Field约束)
+        end
+        配合java代码。可以实现类似过滤的作用
+rule end : 规则体
+
+标准的规则体：
+
+    rule "ruleName"
+        attributes
+        when
+            "规则条件，默认情况下为true"
+            // when和then之间的部分也被称为LHS(left hand side),这里可以写多个规则条件，
+            // 每个规则条件也被称为一个pattern，多个pattern直接默认用and连接，当然也可以修改
+            // 一个常用的pattern语法：  变量名：Object(Field约束)，如：$p:Person(name == "小明")，这里的变量名一般用$开头。
+            // 变量名的作用是为了方便在别的pattern和RHS中使用。如果不需要可以不写。
+            // 变量名可以绑定对象也可以绑定属性，上面演示的是绑定对象的写法，绑定属性的写法：Person($name:name == "小明")
+        then
+            "符合规则条件时执行的规则"
+            // then和end直接的部分也被称为RHS(right hand side),这里可以写满足规则条件后要执行的规则
+            // 当一个对象传入Drools会话后会生成一个fact对象，fact对象的任何变化，都会让对应的方法体被触发（符合pattern时）。
+            // 但无论是LHS还是RHS操作的都是fact对象的引用，直接使用$p.setName("张三")并不会使fact对象改变。
+            // 若要改变fact对象需要调用相关的方法。比如update($p)，除此之外还有insert、delete等。
+    end
+
+Pattern规则条件：
+除了上面提到的：变量名：Object(Field约束)，这种语法，Drools还有很多其它的匹配语法：
+
+in|not in语法：Object(value in|not in (val1,val2,$fieldName...))
+
+eval(val|function) :解析一个boolean型结果
+
+not Object():判断Object不再fact内存中。如：
+when
+    not Student();
+若未传入student对象，则符合规则
+
+exist Object():作用和not相反
+
+contains比较操作符：
+Object(Field[Array/List/String] contains|not contains value)
+如：Person(name contains "小")
+
+memberOf比较操作符：
+Object(value memberOf|not memberOf Field[Array/List/String])
+
+contains和memberOf在对map对象进行比较时，使用的是map的key
+
+matches比较操作符：
+Object(FieldName matches|not matches "正则表达式")
+这里的正则表达式无需使用\进行转义
+
+soundslike比较操作符：
+Object(FieldName soundslike value)
+用于匹配Object的FieldName对应的值的英文读音是不是和 value的读音类似。
+
+str比较操作符：
+Object(FieldName str[startWith|endWith|length] String|Integer)
+如果使用了length选项，第三个参数是整型，用于判断是否长度是预期的长度。
+如：Person(name str[length] 5),即传入的person对象的name值的长度等于5时，此pattern为true。
+
+集合操作：
+现有如下数据结构
+$p:Person = {
+    name :"小明"，
+    teachers:["语文老师","数学老师"]
+}
+List操作：在LHS可以使用teachers[index]获取list中的值，在RHS可以使用$p.getTeachers().get(index)。
+Set操作：只能使用iterator
+map操作: 在LHS可以使用teachers.get(key)，在RHS可以使用$p.getTeachers().get(key)。

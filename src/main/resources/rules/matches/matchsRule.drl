@@ -1,0 +1,10 @@
+package rules.matches
+import com.example.drools.entity.Person;
+    rule "test001"
+        when
+            // matches语法:  Object(fieldName matches| not matches 正则表达式)
+            // 正则表达式无需考虑\的转义
+            $p:Person(name matches "^小.*");
+        then
+            System.out.println("测试matches比较运算符");
+    end

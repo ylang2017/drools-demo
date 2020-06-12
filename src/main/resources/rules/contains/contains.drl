@@ -1,0 +1,42 @@
+package rules.contains
+import com.example.drools.entity.Person;
+import com.example.drools.entity.School;
+    rule "test001"
+        when
+            $p:Person();
+            $s:School(classNames contains $p.className);
+        then
+            System.out.println("测试contains比较操作符");
+    end
+
+    rule "test002"
+        when
+            $s:School(classNames contains "一班");
+        then
+            System.out.println("测试contains比较常量");
+    end
+
+    rule "test003"
+        when
+            $p:Person();
+            $s:School(classNames contains $p.getClassName());
+        then
+            //$p.setClassName("三班");
+            //update($p);
+            System.out.println("测试contains比较fact对象的get方法");
+    end
+
+    rule "test004"
+        when
+            $p:Person();
+            $s:School(classNames not contains $p.getClassName());
+        then
+            System.out.println("不包含");
+    end
+
+    rule "test006"
+        when
+            $p:Person(name contains "小");
+        then
+            System.out.println("字符也可以");
+    end

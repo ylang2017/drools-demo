@@ -1,0 +1,21 @@
+package rules.collection
+import java.util.List;
+import java.util.Set;
+import java.util.Map;
+
+    /*
+        测试List、Set和Map
+    */
+    rule "test001"
+        when
+            $list:List();
+            $set:Set();
+            $map:Map();
+        then
+            System.out.println("-----测试list---");
+            System.out.println($list.get(0));
+            System.out.println("-----测试set---");
+            System.out.println($set.iterator().next());
+            System.out.println("-----测试map---");
+            System.out.println($map.get("hello"));
+    end

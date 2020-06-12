@@ -1,0 +1,61 @@
+    package rules.rulesHello
+    import com.example.drools.entity.Person;
+        rule "test001"
+            when
+                eval(true);
+            then
+                System.out.println("---------test001---------");
+                System.out.println("hello world rules!");
+        end
+
+        rule "test002"
+            when
+                $p:Person();
+            then
+                System.out.println("---------test002---------");
+                System.out.println("姓名："+$p.getName());
+                System.out.println("年龄："+$p.getAge());
+        end
+
+        rule "test003"
+            when
+                $p:Person(age>30);
+            then
+                System.out.println("---------test003---------");
+                System.out.println("姓名："+$p.getName()+",年龄大于30.");
+        end
+
+        rule "test004"
+            when
+                $p:Person(age<=30);
+            then
+                System.out.println("---------test004---------");
+                System.out.println("姓名："+$p.getName()+",年龄小于或等于30.");
+        end
+
+        rule "test005"
+            when
+                $p:Person(name=="张三");
+            then
+                System.out.println("---------test005--测试更新fact对象-------");
+                System.out.println("姓名："+$p.getName()+",年龄："+$p.getAge()+",谎报年龄，将其年龄改为35。");
+                $p.setAge(35);
+                update($p);
+        end
+
+        rule "test006"
+            when
+                $p:Person((age%2)>=0);
+            then
+                System.out.println("---------test006--测试取模运输优先级-------");
+                System.out.println("取模运算成功,取模运算需要用括号调整优先级");
+        end
+
+        rule "test007"
+            when
+                $p:Person(age>=30);
+                and
+                eval(true);
+            then
+                System.out.println("---------test007--测试连接条件-------");
+        end

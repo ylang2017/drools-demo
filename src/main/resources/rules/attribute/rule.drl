@@ -1,0 +1,28 @@
+package rules.attribute
+import com.example.drools.entity.Person;
+    rule "testAttribute01"
+        no-loop true
+        when
+            $p:Person(age>20)
+        then
+            $p.setAge(18);
+            update($p);
+            System.out.println("将年龄设为18");
+    end
+
+    rule "testAttribute02"
+        no-loop true
+        when
+            $p:Person(age<20)
+        then
+            $p.setAge(22);
+            update($p);
+            System.out.println("将年龄设为22");
+    end
+
+    rule "testAttribute03"
+        date-expires "2020-06-12 04:00:00"
+        when
+        then
+            System.out.println("时间大于要求时间");
+    end
